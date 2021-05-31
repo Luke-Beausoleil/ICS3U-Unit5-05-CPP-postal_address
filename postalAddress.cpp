@@ -9,18 +9,30 @@
 #include <cstring>
 #include <locale>
 
-std::string StrtAddress(std::string streetNumber, std::string streetName,
-                    std::string apartmentNumber = "") {
+std::string StrtAddress(std::string firstName, std::string lastName,
+                        std::string streetNumber, std::string streetName,
+                        std::string city, std::string province,
+                        std::string firstPostalCode,
+                        std::string lastPostalCode,
+                        std::string apartmentNumber = "") {
     // this function returns the address
 
     // variables
     std::string address;
     std::string addressUpper;
+    std::locale loc;
 
-    address = streetNumber + " " + streetName;
-    if apartmentNumber.size() != ) {
-        address = apartmentNumber = "-" + address;
+    if (apartmentNumber.size() != 0) {
+        address = firstName + " " + lastName + "\n" + apartmentNumber + "-"
+                  + streetNumber + " " + streetName + "\n" + city + " " +
+                  province + "  " + firstPostalCode + " " + lastPostalCode;
+    } else {
+        address = firstName + " " + lastName + "\n" + streetNumber + " " +
+                  streetName + "\n" + city + " " + province + "  " +
+                  firstPostalCode + " " + lastPostalCode;
     }
+
+    // upper case
     int addressLength = address.length();
 
     // declaring character array
@@ -28,8 +40,8 @@ std::string StrtAddress(std::string streetNumber, std::string streetName,
     strcpy(char_array, address.c_str());
 
     for (int counter = 0; counter < addressLength; counter++) {
-        nameUpper += std::toupper(char_array[counter],loc);
-
+        addressUpper += std::toupper(char_array[counter], loc);
+    }
     return addressUpper;
 }
 
@@ -37,25 +49,30 @@ main() {
     // this function receives input and calls another function
 
     // variables
-    std::string name;
+    std::string firstName;
+    std::string lastName;
     std::string question;
     std::string apartmentNumber;
     std::string streetNumber;
     std::string streetName;
     std::string city;
     std::string province;
-    std::string postalCode;
+    std::string firstPostalCode;
+    std::string lastPostalCode;
     std::locale loc;
     std::string questionUpper = "";
     std::string nameUpper = "";
     std::string address;
 
     // input
-    std::cout << "Enter your name: ";
-    std::cin >> name;
+    std::cout << "Enter your first name: ";
+    std::cin >> firstName;
+    std::cout << "Enter your last name: ";
+    std::cin >> lastName;
     std::cout << "Do you live in an apartment (y/n)?: ";
     std::cin >> question;
 
+    // upper case question to check response
     int questionLength = question.length();
 
     // declaring character array
@@ -63,11 +80,11 @@ main() {
     strcpy(char_array, question.c_str());
 
     for (int counter = 0; counter < questionLength; counter++) {
-        questionUpper += std::toupper(char_array[counter],loc);
+        questionUpper += std::toupper(char_array[counter], loc);
     }
 
     // input (continued)
-    if questionUpper == "Y" || questionUpper == "YES" {
+    if (questionUpper == "Y" || questionUpper == "YES") {
         std::cout << "Enter your apartment number: ";
         std::cin >> apartmentNumber;
     }
@@ -79,30 +96,20 @@ main() {
     std::cin >> city;
     std::cout << "Enter your province (abbreviation): ";
     std::cin >> province;
-    std::cout << "Enter your postal code: ";
-    std::cin >> postalCode;
+    std::cout << "Enter the first three digits of your postal code: ";
+    std::cin >> firstPostalCode;
+    std::cout << "Enter the last three digits of your postal code: ";
+    std::cin >> lastPostalCode;
 
-    // output
+    // output & call function
     std::cout << "" << std::endl;
-
-    // NAME output
-    int nameLength = name.length();
-
-    // declaring character array
-    char char_array[nameLength + 1];
-    strcpy(char_array, name.c_str());
-
-    for (int counter = 0; counter < nameLength; counter++) {
-        nameUpper += std::toupper(char_array[counter],loc);
-    }
-
-    // ADDRESS output & call function
-    if questionUpper == "Y" || questionUpper == "YES" {
-        address = StrtAddress(streetNumber, streetName, apartmentNumber)
+    if (questionUpper == "Y" || questionUpper == "YES") {
+        address = StrtAddress(firstName, lastName, streetNumber, streetName,
+                  city, province, firstPostalCode, lastPostalCode,
+                  apartmentNumber);
     } else {
-        address = StrtAddress(streetNumber, streetName)
+        address = StrtAddress(firstName, lastName, streetNumber, streetName,
+                  city, province, firstPostalCode, lastPostalCode);
     }
     std::cout << address << std::endl;
-
-    // 
 }
